@@ -58,6 +58,11 @@ const Caption = styled.div`
   flex-wrap: wrap;
 `;
 
+const Caption2 = styled(Caption)`
+  font-size: 20px;
+  color: #000;
+`;
+
 const SimilarButton = styled(Link)`
   box-sizing: border-box;
   display: inline-flex;
@@ -77,13 +82,14 @@ const Movie = () => {
   const { theme } = useContext(ThemeContext);
   const { state, dispatch } = useContext(ReducerContext);
 
-  const { movie } = state || {};
+  const { movie } = state;
+  console.log(movie);
 
-  if (!movie) {
+  if (movie.length === 0) {
     return (
-      <Caption css="font-size: 16px">
-        Type something to see search results
-      </Caption>
+      <PageWrapper>
+        <Caption2>Type something to see search results</Caption2>
+      </PageWrapper>
     );
   }
 
