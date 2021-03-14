@@ -6,6 +6,7 @@ export const initialState = {
   showMovies: false,
   showSimilar: false,
   error: '',
+  movie: [],
 }
 
 export const reducer = (state, action) => {
@@ -18,14 +19,26 @@ export const reducer = (state, action) => {
     case actionTypes.showMovies:
         return {
           ...state,
-          showMovies: state.movies.length > 0 && state.search !== '',
+          showMovies: true,
+          showSimilar: false,
         };
     case actionTypes.showSimilar:
-      console.log(state, 'action')
       return {
         ...state,
         search: action.payload,
-        showSimilar: state.movies.length > 0 && state.search !== '',
+        showSimilar: true,
+        showMovies: false,
+      }
+    case actionTypes.hideSimilar:
+      return {
+        ...state,
+        showSimilar: false
+      }
+    case actionTypes.showMovie:
+      return {
+        ...state,
+        showSimilar: false,
+        movie: action.payload,
       }
     case actionTypes.failed:
       return {

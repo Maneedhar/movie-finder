@@ -1,11 +1,11 @@
-import { debounce } from "lodash";
-import React, { useContext, useState } from "react";
+// import { debounce } from "lodash";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { ReducerContext } from "../ReducerContext";
 
 import searchIcon from "../assets/Search.svg";
-import { actionTypes, API_KEY, API_URL } from "../constants";
-import axios from "axios";
+import { actionTypes } from "../constants";
+import { searchMovie } from "../utils/searchMovieByName";
 
 const Container = styled.div`
   display: flex;
@@ -35,40 +35,26 @@ const Icon = styled.img`
 `;
 
 export const Searchbar = () => {
-  const [search, setSearch] = useState("");
-  const { dispatch } = useContext(ReducerContext);
+  const { state, dispatch } = useContext(ReducerContext);
 
-  const searchMovie = async (searchValue) => {
-    const { data } = await axios.get(
-      `${API_URL}?s=${searchValue}&apikey=${API_KEY}`
-    );
-
-    if (data.Response === "True") {
-      const movies = data.Search?.filter((result) => result.Type === "movie");
-      dispatch({
-        type: actionTypes.success,
-        payload: movies,
-      });
-    } else {
-      dispatch({
-        type: actionTypes.failed,
-        error: data.Error,
-      });
+  const keyDown = (e) => {
+    if (e.keyCode === 13) {
+      dispatch({ type: actionTypes.showMovies });
+    } else if (e.keyCode === 27) {
+      dispatch({ type: actionTypes.hideSimilar });
     }
   };
-
-  // const debounced = debounce(setSearch, 100);
 
   return (
     <Container>
       <TextInput
-        value={search}
+        value={state.search}
         placeholder={"Search a Movie"}
         onChange={(e) => {
-          setSearch(e.target.value);
-          searchMovie(search);
-          dispatch({ type: actionTypes.showSimilar, payload: search });
+          searchMovie(e.target.value, dispatch);
+          dispatch({ type: actionTypes.showSimilar, payload: e.target.value });
         }}
+        onKeyDown={keyDown}
       />
       <Icon
         src={searchIcon}

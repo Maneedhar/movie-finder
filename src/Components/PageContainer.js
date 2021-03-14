@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ThemeContext } from "../ThemeContext";
 
 const Container = styled.div`
-  background: ${(props) => (props.dark ? "#696969" : "#d3d3d3")};
+  background: ${(props) => (props.dark ? "#323232" : "#d3d3d3")};
   min-height: 100vh;
 `;
 
